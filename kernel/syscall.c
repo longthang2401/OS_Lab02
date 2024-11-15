@@ -6,7 +6,7 @@
 #include "proc.h"
 #include "syscall.h"
 #include "defs.h"
-
+#include "sysinfo.h"
 
 // Fetch the uint64 at addr from the current process.
 int
@@ -104,6 +104,7 @@ extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_trace(void);
+extern uint64 sys_sysinfo(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -130,6 +131,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
+[SYS_trace]   sys_sysinfo,
 };
 
 
@@ -144,10 +146,26 @@ sys_trace(void) {
 }
 
 
+uint64
+sys_sysinfo(void){
+  uint64 addr;
+  struct sysinfo info;
+  struct proc* p =myproc();
+  argaddr(0,&addr);
+
+  info.freemem = nfree();
+  info.nproc = nproc();
+
+  if(copyout(p->pagetable, addr, (char*)&info, sizeof(info)) < 0)
+    return -1;
+  return 0;
+}
+
+
 char* syscall_names[] = {
     "", "fork", "exit", "wait", "pipe", "read", "kill", "exec", "fstat",
     "chdir", "dup", "getpid", "sbrk", "sleep", "uptime", "open", "write",
-    "mknod", "unlink", "link", "mkdir", "close", "trace",
+    "mknod", "unlink", "link", "mkdir", "close", "trace", "sysinfo",
 };
 
 void

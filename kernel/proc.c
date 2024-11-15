@@ -697,3 +697,15 @@ procdump(void)
   }
 }
 
+uint64
+nproc(void)
+{
+  int procCount = 0;
+  struct proc* p;
+  for(p = proc; p < &proc[NPROC]; p++){
+    if(p->state != UNUSED){
+      procCount++;
+    }
+  }
+  return procCount;
+}

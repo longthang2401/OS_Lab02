@@ -23,6 +23,8 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int trace(int);
+struct sysinfo;
+int sysinfo(struct sysinfo*);
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -43,8 +45,4 @@ void *memcpy(void *, const void *, uint);
 void* malloc(uint);
 void free(void*);
 
-
-// sysinfotest.c
-struct sysinfo;
-int sysinfo(struct sysinfo*);
 
