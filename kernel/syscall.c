@@ -131,35 +131,8 @@ static uint64 (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
-[SYS_trace]   sys_sysinfo,
+[SYS_sysinfo]   sys_sysinfo,
 };
-
-
-uint64
-sys_trace(void) {
-  int trace_mask;
-  argint(0, &trace_mask);
-  struct proc* p = myproc();
-  p->mask = trace_mask;
-
-  return 0;
-}
-
-
-uint64
-sys_sysinfo(void){
-  uint64 addr;
-  struct sysinfo info;
-  struct proc* p =myproc();
-  argaddr(0,&addr);
-
-  info.freemem = nfree();
-  info.nproc = nproc();
-
-  if(copyout(p->pagetable, addr, (char*)&info, sizeof(info)) < 0)
-    return -1;
-  return 0;
-}
 
 
 char* syscall_names[] = {

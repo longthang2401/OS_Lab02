@@ -84,6 +84,9 @@ testcall() {
     exit(1);
   }
 
+  printf("Free memory: %lu bytes\n", info.freemem);
+  printf("Number of processes: %lu\n", info.nproc);
+
   if (sysinfo((struct sysinfo *) 0xeaeb0b5b00002f5e) !=  0xffffffffffffffff) {
     printf("FAIL: sysinfo succeeded with bad argument\n");
     exit(1);
