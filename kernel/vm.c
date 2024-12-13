@@ -486,14 +486,37 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   }
 }
 
-
 #ifdef LAB_PGTBL
-void
-vmprint(pagetable_t pagetable) {
-  // your code here
+  void vmprint(pagetable_t pagetable) {
+    // In địa chỉ của bảng trang
+    printf("page table %p\n", pagetable);
+
+    // Duyệt qua tất cả các mục trong bảng trang (512 mục)
+    for (int i = 0; i < 512; i++) {
+        pte_t pte = pagetable[i];  // Lấy giá trị PTE tại mục i
+
+        // Kiểm tra xem PTE có hợp lệ không
+        if (pte & PTE_V) {
+            uint64 child = PTE2PA(pte);  // Lấy địa chỉ vật lý từ PTE
+
+            // In lùi theo độ sâu của bảng trang
+            for (int j = 0; j < 3; j++) {
+                if (j != 0) {
+                    printf("..");
+                }
+            }
+
+            // In ra chỉ số PTE, giá trị PTE, và địa chỉ vật lý
+            printf("%d: pte %p pa %p\n", i, (void *)pte, (void *)child);
+
+            // Nếu PTE này không phải là lá (leaf), tiếp tục gọi đệ quy để in bảng trang con
+            if ((pte & (PTE_R | PTE_W | PTE_X)) == 0) {
+                vmprint((pagetable_t)child);  // Đệ quy gọi hàm in bảng trang con
+            }
+        }
+    }
 }
 #endif
-
 
 
 #ifdef LAB_PGTBL
