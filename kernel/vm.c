@@ -486,6 +486,8 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   }
 }
 
+
+
 #ifdef LAB_PGTBL
   void vmprint(pagetable_t pagetable) {
     // In địa chỉ của bảng trang
@@ -517,6 +519,8 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     }
 }
 #endif
+
+
 
 
 #ifdef LAB_PGTBL
