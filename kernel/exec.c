@@ -88,7 +88,8 @@ exec(char *path, char **argv)
   stackbase = sp - USERSTACK*PGSIZE;
 
   // Call vmprint after setting up the stack
-  vmprint(pagetable);
+  if(p->pid==1) 
+    vmprint(pagetable);
 
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
